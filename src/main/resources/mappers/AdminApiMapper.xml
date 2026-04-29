@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!-- 담당자: 김준우 -->
+<!-- 관리자 API 관리용 목록, 상세, 버전, 엔드포인트 데이터를 다루는 MyBatis 매퍼다. -->
 <mapper namespace="com.pg.api.repository.AdminApiMapper">
+    <!-- API endpoint row mapping -->
     <resultMap id="apiEndpointResultMap" type="com.pg.api.domain.ApiEndpoint">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
@@ -15,6 +17,7 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
+    <!-- API field row mapping -->
     <resultMap id="apiEndpointFieldResultMap" type="com.pg.api.domain.ApiEndpointField">
         <id property="id" column="id"/>
         <result property="fieldScope" column="field_scope"/>
@@ -28,6 +31,7 @@
         <result property="defaultValue" column="default_value"/>
     </resultMap>
 
+    <!-- API definition row mapping -->
     <resultMap id="apiDefinitionResultMap" type="com.pg.api.domain.ApiDefinition">
         <id property="id" column="id"/>
         <result property="apiCode" column="api_code"/>
@@ -36,6 +40,7 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
+    <!-- API version row mapping -->
     <resultMap id="apiEndpointVersionResultMap" type="com.pg.api.domain.ApiEndpointVersion">
         <id property="id" column="id"/>
         <result property="apiDefinitionId" column="api_definition_id"/>

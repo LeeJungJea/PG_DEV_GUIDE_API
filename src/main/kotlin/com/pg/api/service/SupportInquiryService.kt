@@ -20,6 +20,9 @@ import java.time.LocalDateTime
 import kotlin.random.Random
 
 @Service
+// 담당자: 이정재
+// 고객 지원 문의 서비스는 사용자 문의 생성과 첨부파일 검증/정리, 상세 조회를 담당한다.
+// Java 서비스 계층처럼 비즈니스 규칙을 모아 두지만, Kotlin에서는 정리 로직을 더 간단히 적을 수 있다.
 class SupportInquiryService(
     private val supportInquiryMapper: SupportInquiryMapper,
     private val userMapper: UserMapper,
@@ -34,11 +37,13 @@ class SupportInquiryService(
         .filter { it.isNotEmpty() }
         .toSet()
 
+    // 내 문의 목록은 로그인한 사용자 기준으로만 보여 준다.
     fun getMyInquiries(username: String, limit: Int = 20): List<SupportInquirySummary> {
         val userId = resolveUserId(username)
         return supportInquiryMapper.findRecentByUserId(userId = userId, limit = limit.coerceIn(1, 100))
     }
 
+    // 상세 조회는 본인 문의만 열람 가능하도록 사용자 ID를 함께 검증한다.
     fun getInquiryDetail(username: String, inquiryId: Long): Pair<SupportInquiryDetail, List<SupportInquiryFileSummary>> {
         val userId = resolveUserId(username)
         val inquiry = supportInquiryMapper.findDetailByIdAndUserId(inquiryId = inquiryId, userId = userId)
@@ -56,6 +61,7 @@ class SupportInquiryService(
         files: List<MultipartFile>,
         fileKeys: List<String>,
     ): CreateSupportInquiryResponse {
+        // 생성 전에는 사용자, 카테고리, 제목, 본문, 파일을 모두 정규화한다.
         val userId = resolveUserId(username)
         val normalizedCategory = normalizeCategoryCode(categoryCode)
         val normalizedTitle = title.trim().takeIf { it.isNotEmpty() }

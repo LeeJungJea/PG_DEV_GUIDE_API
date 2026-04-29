@@ -1,5 +1,8 @@
 package com.pg.api.dto
 
+// 관리자 API 관리 화면에서 쓰는 목록/상세/저장 DTO다.
+// 요청과 응답, 그리고 필드 편집용 DTO를 분리해 두면 화면과 API 구조가 서로 헷갈리지 않는다.
+// Java에서 DTO를 여러 클래스로 나누는 방식과 비슷하지만, Kotlin data class는 더 가볍게 쓸 수 있다.
 data class AdminApiEntryResponse(
     val id: String,
     val name: String,

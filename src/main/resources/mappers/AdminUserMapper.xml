@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 담당자: 노혜정 -->
+<!-- 관리자 회원 목록과 상세, 활동 로그를 차분하게 이어 주는 MyBatis 매퍼다. -->
 <mapper namespace="com.pg.api.repository.AdminUserMapper">
 
     <resultMap id="adminUserResultMap" type="com.pg.api.domain.AdminUser">

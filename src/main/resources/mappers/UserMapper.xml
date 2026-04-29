@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 담당자: 김준우 -->
+<!-- 로그인 조회와 사용자 활동 로그 저장을 담당하는 MyBatis 매퍼다. -->
 <mapper namespace="com.pg.api.repository.UserMapper">
 
     <resultMap id="userResultMap" type="com.pg.api.domain.User">

@@ -2,6 +2,9 @@ package com.pg.api.dto
 
 import java.math.BigDecimal
 
+// 결제 취소용 요청과 응답을 구분한 DTO다.
+// 환불/취소는 결제보다 금액 필드가 더 민감하므로 BigDecimal을 써서 정밀도를 유지한다.
+// Java에서도 BigDecimal을 쓰지만, Kotlin data class와 함께 쓰면 값 전달 구조가 더 간단해진다.
 data class GuideCancelRequest(
     val orderId: String,
     val cancelAmount: Long? = null,
@@ -18,9 +21,7 @@ data class GuideCancelResponse(
     val paymentId: String? = null,
 )
 
-/**
- * 레거시 시뮬레이션 서비스 호환용 DTO
- */
+// 외부 취소 API에 넘기는 내부 요청 DTO다.
 data class CancelRequest(
     val paymentId: String,
     val cancelAmount: BigDecimal? = null,
@@ -32,6 +33,7 @@ data class CancelResponse(
     val data: CancelData,
 )
 
+// 취소 처리 후 내부적으로 정리해 둘 세부 결과다.
 data class CancelData(
     val cancelId: String,
     val paymentId: String,

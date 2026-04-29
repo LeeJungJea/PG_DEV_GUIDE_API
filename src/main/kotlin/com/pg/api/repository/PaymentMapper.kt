@@ -6,6 +6,8 @@ import com.pg.api.domain.Payment
 import org.apache.ibatis.annotations.Mapper
 
 @Mapper
+// 결제 관련 CRUD와 상태 조회를 담당하는 MyBatis 매퍼다.
+// 결제 마스터, 카드 상세, 취소 내역을 분리해 저장하는 구조를 그대로 반영한다.
 interface PaymentMapper {
     /**
      * 결제 마스터 정보 저장

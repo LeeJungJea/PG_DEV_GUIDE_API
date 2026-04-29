@@ -1,5 +1,7 @@
 package com.pg.api.dto
 
+// 관리자 문의 관리 화면에서 목록과 상세, 답변 저장에 쓰는 DTO다.
+// Java의 방어적인 getter/setter 방식보다, Kotlin data class로 필요한 필드를 더 직선적으로 표현한다.
 data class AdminInquiryEntryResponse(
     val id: String,
     val inquiryNo: String,

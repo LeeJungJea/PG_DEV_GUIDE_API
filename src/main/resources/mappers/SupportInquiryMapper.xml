@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 담당자: 이정재 -->
+<!-- 일반 사용자의 문의 작성과 목록/상세 조회를 담당하는 MyBatis 매퍼다. -->
 <mapper namespace="com.pg.api.repository.SupportInquiryMapper">
 
+    <!-- Support inquiry summary mapping -->
     <resultMap id="supportInquirySummaryResultMap" type="com.pg.api.domain.SupportInquirySummary">
         <id property="inquiryId" column="inquiry_id"/>
         <result property="inquiryNo" column="inquiry_no"/>
@@ -11,6 +14,7 @@
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
+    <!-- Support inquiry detail mapping -->
     <resultMap id="supportInquiryDetailResultMap" type="com.pg.api.domain.SupportInquiryDetail">
         <id property="inquiryId" column="inquiry_id"/>
         <result property="inquiryNo" column="inquiry_no"/>
@@ -24,6 +28,7 @@
         <result property="answeredAt" column="answered_at"/>
     </resultMap>
 
+    <!-- Support inquiry file mapping -->
     <resultMap id="supportInquiryFileSummaryResultMap" type="com.pg.api.domain.SupportInquiryFileSummary">
         <id property="fileId" column="file_id"/>
         <result property="inquiryId" column="inquiry_id"/>
@@ -36,6 +41,7 @@
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
+    <!-- Insert and file attach queries -->
     <insert id="insertInquiry" parameterType="com.pg.api.domain.SupportInquiryCreateCommand" useGeneratedKeys="true" keyProperty="inquiryId">
         INSERT INTO pgdev.support_inquiries (
             inquiry_no,

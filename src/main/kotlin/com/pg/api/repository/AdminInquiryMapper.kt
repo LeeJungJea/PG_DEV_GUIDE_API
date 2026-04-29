@@ -1,4 +1,4 @@
-package com.pg.api.repository
+﻿package com.pg.api.repository
 
 import com.pg.api.domain.AdminInquiry
 import com.pg.api.domain.AdminInquiryFile
@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Param
 import java.time.LocalDateTime
 
 @Mapper
+// 관리자 문의관리에서 목록, 상세, 답변, 첨부파일, 대시보드 통계를 읽고 쓰는 매퍼다.
+// Java의 DAO 계층처럼 보이지만, MyBatis 인터페이스라 SQL 연결이 더 직접적이다.
 interface AdminInquiryMapper {
     fun findPage(
         @Param("offset") offset: Int,

@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 
 @Mapper
+// UserMapper는 MyBatis가 SQL XML과 연결하는 인터페이스다.
+// 함수 이름 자체가 SQL 문장과 대응되며, Java의 DAO보다 훨씬 선언적으로 읽힌다.
 interface UserMapper {
     fun findByUsername(username: String): User?
 

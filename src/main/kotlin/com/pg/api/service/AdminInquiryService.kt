@@ -21,6 +21,8 @@ import java.time.temporal.ChronoUnit
 import kotlin.math.round
 
 @Service
+// 관리자 문의 관리 서비스는 목록/상세/답변 저장뿐 아니라 첨부파일 검증과 HTML 정화까지 책임진다.
+// Java 서비스처럼 비즈니스 규칙을 한 곳에 모으되, Kotlin으로 쓰면 조건 분기가 더 짧아진다.
 class AdminInquiryService(
     private val adminInquiryMapper: AdminInquiryMapper,
     private val cloudinaryUploadService: CloudinaryUploadService,
@@ -35,6 +37,7 @@ class AdminInquiryService(
         .filter { it.isNotEmpty() }
         .toSet()
 
+    // 리스트 조회는 상태, 카테고리, 날짜 조건을 조합해서 처리한다.
     fun getInquiries(
         page: Int,
         size: Int,
@@ -87,6 +90,7 @@ class AdminInquiryService(
         return adminInquiryMapper.findRecentUnhandled(sanitizedLimit)
     }
 
+    // 대시보드에서 보여 줄 요약 수치를 한 번에 계산한다.
     fun getDashboardSummary(): Triple<Long, Long, Int> {
         val today = LocalDate.now()
         val todayStart = today.atStartOfDay()
@@ -139,6 +143,7 @@ class AdminInquiryService(
         files: List<MultipartFile> = emptyList(),
         fileKeys: List<String> = emptyList(),
     ): AdminInquiry {
+        // 답변 저장은 상태 변경과 파일 저장을 같이 처리하므로 트랜잭션이 필요하다.
         val normalizedStatus = normalizeStatus(status)
             ?: throw IllegalArgumentException("Unsupported status: $status")
 

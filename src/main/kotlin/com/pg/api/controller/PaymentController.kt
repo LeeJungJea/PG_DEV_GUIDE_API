@@ -21,6 +21,9 @@ class PaymentController(
     private val pgApiBridgeService: PgApiBridgeService,
 ) {
 
+    // 담당자: 김준우
+    // 결제 요청, 상태 조회, 취소 요청을 각각 HTTP 메서드에 맞춰 분리했다.
+    // Spring MVC에서는 @PostMapping, @GetMapping 같은 애너테이션으로 URL과 동작을 선언적으로 연결한다.
     @PostMapping("/request")
     fun requestPayment(@RequestBody request: GuidePaymentRequest): ResponseEntity<ApiResponse<GuidePaymentRequestResponse>> {
         val response = pgApiBridgeService.requestPayment(request)
