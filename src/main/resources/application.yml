@@ -12,9 +12,9 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     # [Original Schema: aitf] -> [Target Schema: pgdev]
-    url: jdbc:postgresql://ep-bitter-sun-a44cor85.us-east-1.aws.neon.tech:5432/verceldb?currentSchema=pgdev&sslmode=require
-    username: default
-    password: 1zGNCST4qeBh
+    url: jdbc:postgresql://ep-raspy-heart-a1k5ks8q-pooler.ap-southeast-1.aws.neon.tech:5432/neondb?currentSchema=pgdev&sslmode=require&prepareThreshold=0
+    username: neondb_owner
+    password: npg_wBkFdyHiM8p5
   sql:
     init:
       mode: never

@@ -10,6 +10,7 @@ class CorsConfig : WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOrigins(
                 "http://localhost:5173",
+                "http://127.0.0.1:5173",
                 "https://pg-dev-guide-view.vercel.app",
                 "https://pg-dev-guide-view.vercel.app/",
                 "https://pg-dev-guide-view-six.vercel.app"
