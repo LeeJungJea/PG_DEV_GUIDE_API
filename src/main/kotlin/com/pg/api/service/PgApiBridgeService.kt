@@ -29,8 +29,9 @@ class PgApiBridgeService(
             failUrl = request.failUrl ?: resolveGuideApiCallbackUrl("fail"),
         )
 
+        val pgApiBaseUrl = resolvePaymentActionBaseUrl()
         val uri = UriComponentsBuilder
-            .fromHttpUrl("${resolveBaseUrl()}/api/pay/ready")
+            .fromHttpUrl("${pgApiBaseUrl}/api/pay/ready")
             .queryParam("paymentMethodId", resolvedRequest.paymentMethodId)
             .queryParamIfPresent("orderId", java.util.Optional.ofNullable(resolvedRequest.orderId))
             .queryParam("userId", resolvedRequest.userId)
@@ -44,7 +45,6 @@ class PgApiBridgeService(
             .toUri()
 
         val response = exchangeForMap(uri.toString())
-        val pgApiBaseUrl = resolveBaseUrl()
 
         return GuidePaymentRequestResponse(
             orderId = response["orderId"]?.toString().orEmpty(),
@@ -79,7 +79,7 @@ class PgApiBridgeService(
 
     fun cancelPayment(request: GuideCancelRequest): GuideCancelResponse {
         val uriBuilder = UriComponentsBuilder
-            .fromHttpUrl("${resolveBaseUrl()}/api/pay/cancel")
+            .fromHttpUrl("${resolvePaymentActionBaseUrl()}/api/pay/cancel")
             .queryParam("orderId", request.orderId)
 
         request.cancelAmount?.let { uriBuilder.queryParam("cancelAmount", it) }
@@ -121,6 +121,8 @@ class PgApiBridgeService(
             cloudBaseUrl
         }
     }
+
+    private fun resolvePaymentActionBaseUrl(): String = cloudBaseUrl
 
     private fun resolveGuideApiBaseUrl(): String {
         return if (System.getenv("K_SERVICE").isNullOrBlank()) {
