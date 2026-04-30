@@ -19,10 +19,15 @@ import kotlin.math.ceil
 
 @RestController
 @RequestMapping("/admin/users")
+// 담당자: 노혜정
+// AdminUserController는 회원 목록과 회원 상세를 관리자 화면에 제공하는 입구다.
+// 목록과 상세를 한 곳에서 넘기되, 화면이 필요한 값만 차분하게 맞춰 내려준다.
 class AdminUserController(private val adminUserService: AdminUserService) {
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
+    // 회원 목록은 페이징과 필터를 적용해 내려준다.
+    // 검색어와 상태값을 함께 받기 때문에, 결과를 너무 복잡하지 않게 정리하는 편이 좋다.
     @GetMapping
     fun getUsers(
         @RequestParam(defaultValue = "1") page: Int,
@@ -45,6 +50,8 @@ class AdminUserController(private val adminUserService: AdminUserService) {
         return ResponseEntity.ok(ApiResponse("SUCCESS", payload))
     }
 
+    // 회원 상세는 활동 로그까지 함께 보여 준다.
+    // 우측 패널이 한 번에 채워지도록, 본문과 이력을 묶어서 반환한다.
     @GetMapping("/{id}")
     fun getUserDetail(@PathVariable id: Long): ResponseEntity<ApiResponse<AdminUserDetailResponse?>> {
         val user = adminUserService.getUserById(id)

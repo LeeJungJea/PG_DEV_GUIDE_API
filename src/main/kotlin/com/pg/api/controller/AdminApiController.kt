@@ -14,6 +14,9 @@ import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/admin/api")
+// 담당자: 김준우
+// AdminApiController는 관리자 API 목록, 상세, 생성, 수정, 삭제를 받는 진입점이다.
+// 서비스 레이어로 넘기기 전에 HTTP 요청과 DTO를 맞춰 주는 역할을 한다.
 class AdminApiController(private val adminApiService: AdminApiService) {
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
@@ -22,6 +25,7 @@ class AdminApiController(private val adminApiService: AdminApiService) {
      * 전체 API 엔드포인트 목록 조회
      * GET /admin/api
      */
+    // 목록 화면은 엔티티를 화면용 응답 DTO로 바꿔서 내려준다.
     @GetMapping
     fun getAllApis(): ResponseEntity<ApiResponse<List<AdminApiEntryResponse>>> {
         val apis = adminApiService.getAllApiEndpoints()
@@ -33,6 +37,7 @@ class AdminApiController(private val adminApiService: AdminApiService) {
      * 단일 API 엔드포인트 조회
      * GET /admin/api/{id}
      */
+    // 상세 화면은 API 정보와 필드 목록을 함께 내려준다.
     @GetMapping("/{id}")
     fun getApi(@PathVariable id: Long): ResponseEntity<ApiResponse<AdminApiDetailResponse?>> {
         val api = adminApiService.getApiEndpointById(id)
@@ -46,6 +51,7 @@ class AdminApiController(private val adminApiService: AdminApiService) {
      * API 엔드포인트 등록
      * POST /admin/api
      */
+    // 새 API 등록은 요청 DTO를 도메인 엔티티로 바꾼 뒤 서비스로 넘긴다.
     @PostMapping
     fun createApi(@RequestBody request: CreateAdminApiRequest): ResponseEntity<ApiResponse<AdminApiEntryResponse>> {
         return try {
@@ -69,6 +75,7 @@ class AdminApiController(private val adminApiService: AdminApiService) {
      * API 엔드포인트 수정
      * PUT /admin/api/{id}
      */
+    // 수정은 기존 id를 기준으로 업데이트한다.
     @PutMapping("/{id}")
     fun updateApi(
         @PathVariable id: Long,
@@ -95,6 +102,7 @@ class AdminApiController(private val adminApiService: AdminApiService) {
      * API 엔드포인트 삭제
      * DELETE /admin/api/{id}
      */
+    // 삭제는 서비스에서 실제 DB 정리를 담당한다.
     @DeleteMapping("/{id}")
     fun deleteApi(@PathVariable id: Long): ResponseEntity<ApiResponse<Any>> {
         return try {
@@ -109,6 +117,7 @@ class AdminApiController(private val adminApiService: AdminApiService) {
      * API 상태 업데이트
      * PATCH /admin/api/{id}/status
      */
+    // 상태 변경은 목록 재정렬과 화면 배지를 위해 별도 엔드포인트로 분리했다.
     @PatchMapping("/{id}/status")
     fun updateApiStatus(
         @PathVariable id: Long,

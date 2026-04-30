@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+// PlaygroundCallbackController는 결제 결과가 돌아올 때 브라우저 팝업/오프너 간 메시지를 전달하는 입구다.
 class PlaygroundCallbackController(
     private val objectMapper: ObjectMapper,
 ) {
 
+    // 결제 결과를 브라우저 창 사이에서 전달하는 HTML 응답을 만든다.
     @GetMapping("/playground/{resultType}", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     fun relayCallback(
@@ -71,6 +73,7 @@ class PlaygroundCallbackController(
                   <p>잠시 후 창이 자동으로 닫힙니다. 닫히지 않으면 직접 닫아주세요.</p>
                 </div>
                 <script>
+                  // opener가 있으면 결과를 전달하고, 잠시 후 창을 닫는다.
                   (function () {
                     var payload = $payloadJson;
                     if (window.opener && !window.opener.closed) {

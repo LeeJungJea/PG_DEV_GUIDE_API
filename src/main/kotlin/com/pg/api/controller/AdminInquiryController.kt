@@ -26,10 +26,15 @@ import kotlin.math.ceil
 
 @RestController
 @RequestMapping("/admin/inquiries")
+// 담당자: 이정재
+// AdminInquiryController는 관리자 문의 대시보드, 목록, 상세, 상태 변경, 답변 저장의 입구다.
+// 요청이 많아 보여도, 실제로는 조회용과 수정용 흐름을 딱 나눠 두면 된다.
 class AdminInquiryController(private val adminInquiryService: AdminInquiryService) {
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
+    // 대시보드 요약은 접수/미처리/평균 응답시간만 빠르게 보여 준다.
+    // 화면 상단 카드가 필요로 하는 값만 가져오면 충분하다.
     @GetMapping("/dashboard-summary")
     fun getDashboardSummary(): ResponseEntity<ApiResponse<AdminInquiryDashboardSummaryResponse>> {
         val (todayReceived, unhandled, avgResponseMinutes) = adminInquiryService.getDashboardSummary()
@@ -41,6 +46,8 @@ class AdminInquiryController(private val adminInquiryService: AdminInquiryServic
         return ResponseEntity.ok(ApiResponse("SUCCESS", payload))
     }
 
+    // 미처리 문의는 관리자 홈의 보조 카드에 표시한다.
+    // 많지 않게 잘라서 보내면, 첫 화면이 덜 복잡해진다.
     @GetMapping("/dashboard-unhandled")
     fun getDashboardUnhandled(
         @RequestParam(defaultValue = "5") limit: Int,
@@ -49,6 +56,8 @@ class AdminInquiryController(private val adminInquiryService: AdminInquiryServic
         return ResponseEntity.ok(ApiResponse("SUCCESS", items))
     }
 
+    // 목록 조회는 필터와 페이징을 함께 처리한다.
+    // 검색 조건이 붙을 수 있으니, 여기서 한 번에 정리해 둔다.
     @GetMapping
     fun getInquiries(
         @RequestParam(defaultValue = "1") page: Int,
@@ -85,6 +94,8 @@ class AdminInquiryController(private val adminInquiryService: AdminInquiryServic
         }
     }
 
+    // 상세 화면은 본문과 첨부파일을 함께 보낸다.
+    // 본문과 파일을 따로 받으면 화면이 다시 합쳐야 해서 번거롭다.
     @GetMapping("/{id:\\d+}")
     fun getInquiryDetail(@PathVariable id: Long): ResponseEntity<ApiResponse<AdminInquiryDetailResponse?>> {
         val inquiry = adminInquiryService.getInquiryById(id)
@@ -94,6 +105,8 @@ class AdminInquiryController(private val adminInquiryService: AdminInquiryServic
         return ResponseEntity.ok(ApiResponse("SUCCESS", inquiry.toDetailResponse(files)))
     }
 
+    // 상태만 바꾸는 요청은 간단한 PATCH로 처리한다.
+    // 전체 수정이 아니라 값 하나만 바뀌면 PATCH가 더 어울린다.
     @PatchMapping("/{id}/status")
     fun updateInquiryStatus(
         @PathVariable id: Long,
@@ -107,6 +120,8 @@ class AdminInquiryController(private val adminInquiryService: AdminInquiryServic
         }
     }
 
+    // 답변 본문만 저장하는 경우의 엔드포인트다.
+    // 답변 텍스트와 상태 변경을 분리하면 흐름이 훨씬 읽기 쉬워진다.
     @PatchMapping("/{id}/answer")
     fun updateInquiryAnswer(
         @PathVariable id: Long,
@@ -124,6 +139,8 @@ class AdminInquiryController(private val adminInquiryService: AdminInquiryServic
         }
     }
 
+    // 파일 첨부가 포함되면 multipart로 별도 처리한다.
+    // 텍스트와 파일 전송 방식이 다르기 때문에, 이 엔드포인트는 분리해 둔다.
     @PatchMapping("/{id}/answer", consumes = ["multipart/form-data"])
     fun updateInquiryAnswerMultipart(
         @PathVariable id: Long,

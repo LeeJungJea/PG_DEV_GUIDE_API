@@ -1,5 +1,7 @@
 package com.pg.api.dto
 
+// 일반 사용자 문의 화면에서 목록, 상세, 파일 정보를 주고받는 DTO다.
+// Java의 여러 응답 객체를 흩어 놓는 방식보다, Kotlin data class로 묶어 두면 읽는 흐름이 더 단순하다.
 data class CreateSupportInquiryResponse(
     val inquiryId: String,
     val inquiryNo: String,

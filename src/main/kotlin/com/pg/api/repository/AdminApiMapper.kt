@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Param
 import java.time.LocalDateTime
 
 @Mapper
+// 관리자 API 관리 화면의 목록, 상세, 버전, 필드 메타데이터를 다루는 매퍼다.
+// Java에서 매퍼와 DAO를 나눠 보던 흐름과 비슷하지만, 여기서는 SQL 이름이 인터페이스에 그대로 붙는다.
 interface AdminApiMapper {
     fun findAll(): List<ApiEndpoint>
 
@@ -63,4 +65,3 @@ interface AdminApiMapper {
 
     fun updateDisplayOrderColumn(): Int
 }
-

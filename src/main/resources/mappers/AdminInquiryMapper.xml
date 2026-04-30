@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 담당자: 이정재 -->
+<!-- 관리자 문의 목록, 상세, 답변, 첨부파일, 통계 조회를 처리하는 MyBatis 매퍼다. -->
 <mapper namespace="com.pg.api.repository.AdminInquiryMapper">
 
+    <!-- Admin inquiry row mapping -->
     <resultMap id="adminInquiryResultMap" type="com.pg.api.domain.AdminInquiry">
         <id property="inquiryId" column="inquiry_id"/>
         <result property="inquiryNo" column="inquiry_no"/>
@@ -19,6 +22,7 @@
         <result property="answeredAt" column="answered_at"/>
     </resultMap>
 
+    <!-- Admin inquiry file mapping -->
     <resultMap id="adminInquiryFileResultMap" type="com.pg.api.domain.AdminInquiryFile">
         <id property="fileId" column="file_id"/>
         <result property="inquiryId" column="inquiry_id"/>
@@ -31,6 +35,7 @@
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
+    <!-- Shared filter block for inquiry search -->
     <sql id="inquiryFilters">
         <where>
             AND si.created_at <![CDATA[>=]]> #{fromDateTime}

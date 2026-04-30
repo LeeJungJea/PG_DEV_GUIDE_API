@@ -15,16 +15,19 @@ import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/docs/apis")
+// ApiDocsController는 프론트 API 문서 페이지가 읽을 공개 문서를 제공하는 입구다.
 class ApiDocsController(private val adminApiService: AdminApiService) {
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
+    // 공개 API 문서 목록은 프론트 문서 페이지의 좌측 메뉴에 쓰인다.
     @GetMapping
     fun getAllApiDocs(): ResponseEntity<ApiResponse<List<AdminApiEntryResponse>>> {
         val apis = adminApiService.getAllApiEndpoints()
         return ResponseEntity.ok(ApiResponse("SUCCESS", apis.map { convertToResponse(it) }))
     }
 
+    // 단일 API 문서는 상세 필드와 함께 내려준다.
     @GetMapping("/{id}")
     fun getApiDoc(@PathVariable id: Long): ResponseEntity<ApiResponse<AdminApiDetailResponse?>> {
         val api = adminApiService.getApiEndpointById(id)

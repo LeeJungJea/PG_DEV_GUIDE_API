@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/auth")
 class AuthController(private val authService: AuthService) {
 
+    // 담당자: 김준우
+    // HTTP 요청 바디를 DTO로 받고, 서비스 레이어에 전달하는 전형적인 Spring MVC 컨트롤러 패턴이다.
+    // Java의 서블릿 직접 처리보다, @RequestBody와 ResponseEntity로 요청/응답을 더 명확하게 분리한다.
     @PostMapping("/login")
     fun login(
         @RequestBody request: LoginRequest,
@@ -45,6 +48,8 @@ class AuthController(private val authService: AuthService) {
         }
     }
 
+    // X-Forwarded-For는 프록시나 로드밸런서를 거칠 때 원래 클라이언트 IP를 담는 헤더다.
+    // 없으면 request.remoteAddr를 사용해 직접 연결된 IP를 기본값으로 쓴다.
     private fun extractClientIp(request: HttpServletRequest): String? {
         val xForwardedFor = request.getHeader("X-Forwarded-For")
         if (!xForwardedFor.isNullOrBlank()) {

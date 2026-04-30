@@ -1,7 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 담당자: 김준우 -->
+<!-- 결제 마스터, 카드 상세, 취소 내역을 함께 다루는 MyBatis 매퍼다. -->
 <mapper namespace="com.pg.api.repository.PaymentMapper">
 
+    <!-- Payment row with card detail and cancellation collection -->
     <resultMap id="paymentResultMap" type="com.pg.api.domain.Payment">
         <id property="id" column="id"/>
         <result property="paymentId" column="payment_id"/>
@@ -15,7 +18,9 @@
         <result property="createdAt" column="created_at"/>
         <result property="approvedAt" column="approved_at"/>
         
-        <!-- 1:1 관계 (카드 상세) -->
+        <!-- 1:1 relationship for card detail -->
+        <!-- 결제 1건에 카드 상세는 1개만 붙는다. -->
+        <!-- 그래서 1:1 관계는 association으로, 결제 본문과 자연스럽게 묶는다. -->
         <association property="cardDetail" javaType="com.pg.api.domain.CardDetail">
             <id property="paymentId" column="id"/>
             <result property="issuer" column="issuer"/>
@@ -23,7 +28,9 @@
             <result property="installmentMonth" column="installment_month"/>
         </association>
         
-        <!-- 1:N 관계 (취소 내역) -->
+        <!-- 1:N relationship for cancellation history -->
+        <!-- 취소 이력은 여러 건일 수 있다. -->
+        <!-- 1:N 관계는 collection으로 받아야 결과가 한 결제 아래에 차례로 쌓인다. -->
         <collection property="cancellations" ofType="com.pg.api.domain.Cancellation">
             <id property="id" column="cancel_id_pk"/>
             <result property="cancelId" column="cancel_id"/>
@@ -35,6 +42,9 @@
         </collection>
     </resultMap>
 
+    <!-- Payment write queries -->
+    <!-- insertPayment로 생성된 PK를 다음 카드 상세/취소 저장 단계에서 재사용한다. -->
+    <!-- 먼저 마스터를 만들고, 그 id를 자식 테이블에 넘기는 순서가 핵심이다. -->
     <insert id="insertPayment" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO payments (payment_id, tid, mid, order_id, amount, status, payment_method, goods_name, created_at, approved_at)
         VALUES (#{paymentId}, #{tid}, #{mid}, #{orderId}, #{amount}, #{status}, #{paymentMethod}, #{goodsName}, #{createdAt}, #{approvedAt})

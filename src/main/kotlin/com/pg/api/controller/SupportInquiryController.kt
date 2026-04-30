@@ -18,12 +18,17 @@ import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/support/inquiries")
+// 담당자: 이정재
+// SupportInquiryController는 일반 사용자의 문의 목록, 상세, 생성 요청을 받는 입구다.
+// 일반 사용자 화면에서 필요한 흐름만 빠르게 묶어 주는 컨트롤러다.
 class SupportInquiryController(
     private val supportInquiryService: SupportInquiryService,
 ) {
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
+    // 사용자의 문의 목록은 username 기준으로 가져온다.
+    // 본인 데이터만 보여 주는 화면이라, 기준값이 분명해야 한다.
     @GetMapping
     fun getMyInquiries(
         @RequestParam username: String,
@@ -46,6 +51,8 @@ class SupportInquiryController(
         }
     }
 
+    // 문의 상세는 본인 문의인지 확인하기 위해 username을 함께 받는다.
+    // 다른 사람 문의를 못 보게 하려면, 여기서 사용자 검증을 같이 해야 한다.
     @GetMapping("/{id:\\d+}")
     fun getInquiryDetail(
         @PathVariable id: Long,
@@ -84,6 +91,8 @@ class SupportInquiryController(
         }
     }
 
+    // 문의 생성은 multipart로 첨부파일까지 함께 받는다.
+    // 텍스트와 파일을 한 번에 보내는 구조라, 요청 형식이 조금 다르다.
     @PostMapping(consumes = ["multipart/form-data"])
     fun createInquiry(
         @RequestParam username: String,
